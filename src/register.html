@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Registration - tinyCam Cloud</title>
+  <base href="./">
+
+  <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico">
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-11351800-4', 'auto');
+</script>
+<script>
+function sendRegisterAsync() {
+  document.getElementById("submit").disabled = true;
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (xhttp.readyState === 4) {
+      var json = JSON.parse(xhttp.responseText);
+      if (xhttp.status === 200 && json.code == 100) {
+        document.getElementById("form").hidden = true;
+        document.getElementById("success").hidden = false;
+        document.getElementById("failed").hidden = true;
+      } else {
+        document.getElementById("form").hidden = true;
+        document.getElementById("success").hidden = true;
+        document.getElementById("failed").hidden = false;
+        document.getElementById("error").innerText = json.message;
+      }
+    }
+  }
+  var request = "https://cloud.tinycammonitor.com/v1/register.php";
+  var login = document.getElementById("login").value;
+  xhttp.open("POST", request, true);
+  var params = {"login":login, "pwd":""};
+  xhttp.send(JSON.stringify(params));
+}
+</script>
+<style type="text/css">
+.login-screen {
+  padding-top: 50px;
+  margin: 0 auto;
+  max-width: 600px;
+}
+</style>
+  <link href="assets/css/app.css" rel="stylesheet" type="text/css" />
+  <link href="assets/css/materialize.min.css" rel="stylesheet" type="text/css" media="screen,projection"/>
+</head>
+
+<body style="background:#BDBDBD">
+
+<br/>
+<div class="container, login-screen">
+    <div class="card" id="form" style="padding:30px;">
+        <h4 class="center-align">tinyCam Cloud Registration</h4>
+        <div style="padding-top:30px;padding-bottom:10px;">Enter your email for tinyCam Cloud registration. This email address will be used as cloud login username.</div>
+        <div class="input-field">
+            <input id="login" type="email" class="validate" required>
+            <label for="login">Email address to register</label>
+        </div>
+        <div class="center-align">
+            <button type="submit" id="submit" onclick="sendRegisterAsync();" class="btn">Register</button>
+        </div>
+        <div style="padding-top:20px;">After registration you should get <b>7 days free</b> trial subscription.</div>
+    </div>
+    <div class="card" id="success" style="padding:30px;" hidden>
+        <h5 class="center-align">Thank you for registration!</h5>
+        <div class="center-align" style="padding:20px;">User registration <b>succeeded</b>. Please check your email account.</div>
+        <div class="center-align">
+            <a class="btn" href="login"><i class="fas fa-sign-in-alt fa-lg" aria-hidden="true"></i> <span style="padding: 0px 10px;">Login</span></a>
+        </div>
+    </div>
+    <div class="card" id="failed" style="padding:30px;" hidden>
+        <h5 class="center-align">Failed to register!</h5>
+        <div class="center-align" style="padding-top:20px;"><span id="error"></span><br/>
+        Want to <a href="password_reset.html">reset</a> a password?</div>
+    </div>
+</div>
+
+<script type="text/javascript" src="assets/js/materialize.min.js"></script>
+</body>
+</html>

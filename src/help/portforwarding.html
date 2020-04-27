@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>How to make port forwarding - tinyCam Cloud</title>
+  <base href="./">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico">
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-11351800-4', 'auto');
+</script>
+
+  <!-- load custom fonts -->
+  <script defer src="assets/js/all.js"></script>
+  <!-- load MUI -->
+  <link href="assets/css/app.css" rel="stylesheet" type="text/css" />
+  <link href="assets/css/mui.min.css" rel="stylesheet" type="text/css" />
+  <script src="assets/js/mui.min.js"></script>
+</head>
+
+<body style="background: #BDBDBD">
+
+    <div class="mui-panel" style="background: #E0E0E0; padding: 3px">
+        <div class="mui-container-fluid" style="text-align:right">
+        </div>
+    </div>
+
+<div class="mui-container">
+    <div class="mui-panel" style="padding:30px; margin-bottom:40px;">
+        <div class="mui--text-headline mui--text-center">Port forwarding</div>
+        <div class="mui--text-subhead" style="padding-top:50px;">
+            <div>
+                  Port forwarding is your router setting that allow access to your camera from outside world. You need to setup port forwarding before tinyCam Cloud could start recording from your camera. To do it you need to know:<br/>
+                  <ul>
+                      <li>Camera local IP address</li>
+                      <li>Camera local RTSP port</li>
+                  </ul>
+                  You could get from "Camera edit":<br/>
+              </div>
+              <div><img src="/help/cam_edit.png" width="40%"></div><br/>
+
+              <div>Now login to your router, navigate to the "Port forwarding" (or virtual server) and create a forwarding rule:<br/>
+              From remote port (set any number above 500 here) to Camera local IP address and camera port.<br/><br/>Example:
+              port 5541 -> ip 192.168.1.11 port 554 (put your settings here).</div>
+              <br/>
+              <div>Now it is time to setup camera access from outside. In "Camera edit" navigate to "advanced":</div>
+              <div><img src="/help/cam_adv.png" width="40%"></div><br/>
+              <div>You could get your remote IP from here: <a href="http://www.myipaddress.com">my ip address</a>. Remote port is same you entered in forwarding rule (5541 from example above)</div><br/>
+              <div>Now camera is ready for both: to be added to tinyCam Cloud and to be viewed locally.</div><br/>
+            <div>To see your router specific help please visit <a href="https://portforward.com/router.htm">portforward.com</a> and select your router vendor.</div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
