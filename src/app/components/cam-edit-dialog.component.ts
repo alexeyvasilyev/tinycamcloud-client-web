@@ -431,8 +431,8 @@ export class CamEditDialogComponent {
           this.camPropMask &= ~this.PARAM_CAM_PROP_MASK_REQUEST_SUB;
     }
 
-    onPreferUdpChange(values:any): void {
-        let entry = values.currentTarget.checked ? 1 : 0;
+    onPreferUdpChange(value:any): void {
+        let entry = value.checked ? 1 : 0;
         if (entry)
             this.camPropMask |= this.PARAM_CAM_PROP_MASK_PREFER_UDP;
         else
