@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, SimpleChanges, ElementRef, ViewChild } from '@angular/core';
 import { Login, Server, CameraSettings, ArchiveRecord, EventRecord } from '../models'
 import { ArchiveListService, EventListService, LoginService } from '../services';
-import { Observable } from 'rxjs/Rx';
+//import { Observable } from 'rxjs';
 import Utils from '../utils';
 import JsonUtils from '../jsonutils';
 import ResizeObserver from 'resize-observer-polyfill';
@@ -907,22 +907,35 @@ export class ArchiveTimelineComponent implements OnInit {
     }
 
     private startUpdateTimer(): void {
-        // console.log("startUpdateTimer()");
+        console.log("startUpdateTimer()");
         if (this.timerSubscription)
-            this.timerSubscription.unsubscribe();
-        let timer = Observable.timer(1000, 1000 / this.playerSpeed).takeWhile(() => this.videoPlaying);
-        this.timerSubscription = timer.subscribe(t => {
-            // console.log('t: ' + t);
+            clearTimeout(this.timerSubscription);
+        this.timerSubscription = setTimeout(()=> {
             let l = this.timeline.getCurrent() + 1000;
             this.timeline.setCurrent(l);
             this.timeline.draw();
-        });
+            if (this.videoPlaying) {
+                this.startUpdateTimer();
+            }
+        }, 1000 / this.playerSpeed);
+
+        // if (this.timerSubscription)
+        //     this.timerSubscription.unsubscribe();
+        // let timer = Observable.timer(1000, 1000 / this.playerSpeed).takeWhile(() => this.videoPlaying);
+        // this.timerSubscription = timer.subscribe(t => {
+        //     // console.log('t: ' + t);
+        //     let l = this.timeline.getCurrent() + 1000;
+        //     this.timeline.setCurrent(l);
+        //     this.timeline.draw();
+        // });
     }
 
     private stopUpdateTimer(): void {
-        // console.log("stopUpdateTimer()");
+        console.log("stopUpdateTimer()");
         if (this.timerSubscription)
-            this.timerSubscription.unsubscribe();
+            clearTimeout(this.timerSubscription);
+        // if (this.timerSubscription)
+        //     this.timerSubscription.unsubscribe();
         this.timerSubscription = null;
     }
 

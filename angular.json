@@ -17,6 +17,13 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "allowedCommonJsDependencies": [
+                "rxjs",
+                "rxjs-compat",
+                "hammerjs",
+                "crypto-js",
+                "angular2-moment"
+            ],
             "outputPath": "dist",
             "index": "src/index.html",
             "main": "src/main.ts",

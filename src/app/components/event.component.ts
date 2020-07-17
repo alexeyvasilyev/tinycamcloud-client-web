@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 // import { trigger, animate, transition, style, state, keyframes } from '@angular/animations';
 import { WindowRefService } from '../services';
-import { Observable } from 'rxjs/Rx';
+// import { Observable } from 'rxjs/Rx';
 import { MatDialog } from '@angular/material/dialog';
 import { VideoDialogComponent } from './video-dialog.component';
 import { fadeInAnimation } from '../animations/';
@@ -114,7 +114,7 @@ import Utils from '../utils'
     <div (click)="openDialog($event)" class="img" (mouseleave)="videoPlaying=false; videoLoading=false; loadedPercent=0;">
 
       <div *ngIf="autoplayOnHover" >
-        <div class="event-image-container" [hidden]="videoPlaying">
+        <div class="event-image-container" [hidden]="videoPlaying" (mouseleave)="stopProgressBar()">
           <img class="event-image" alt="Video" src="{{imageUrl}}" (mouseover)="startPlayer($event)" />
           <!-- <div *ngIf="!videoPlaying" class="middle circle" [hidden]="videoLoading" style="opacity:0.4;"> -->
           <div class="middle circle" [ngStyle]="{'opacity': 0.5 - loadedPercent / 100}">
@@ -163,6 +163,7 @@ export class EventComponent implements OnInit {
     videoPlaying = false;
     videoLoading = false;
     private timerSubscription;
+    private timerSubscriptionStartedTime;
     loadedPercent = 0;
     private initTime = 0;
 
@@ -180,7 +181,7 @@ export class EventComponent implements OnInit {
     @Input() hasAudio: boolean;
 
     ngOnInit() {
-        this.autoplayOnHover = Utils.isBrowserFirefox();
+        this.autoplayOnHover = true;//Utils.isBrowserFirefox();
         this.initTime = new Date().getTime();
     }
 
@@ -203,7 +204,7 @@ export class EventComponent implements OnInit {
     }
 
     videoLoaded(event): void {
-        console.log("videoLoaded()");
+        // console.log("videoLoaded()");
         this.stopProgressBar();
         this.videoLoading = false;
         this.videoPlaying = true;
@@ -211,23 +212,42 @@ export class EventComponent implements OnInit {
 
     private startProgressBar(): void {
         // console.log("startProgressBar()");
-        if (this.timerSubscription)
-            this.timerSubscription.unsubscribe();
-        this.loadedPercent = 0;
-        let timer = Observable.timer(0, 100).take(50); // 5 sec
-        this.timerSubscription = timer.subscribe(t => this.loadedPercent = Math.min(t * 10, 500));
+        // if (this.timerSubscription)
+        //     this.timerSubscription.unsubscribe();
+        // let timer = Observable.timer(0, 100).take(50); // 5 sec
+        // this.timerSubscription = timer.subscribe(t => this.loadedPercent = Math.min(t * 10, 500));
+        // this.loadedPercent = 0;
+        this.timerSubscriptionStartedTime = Date.now();
+        this.startProgressBarTimer();
     }
 
-    private stopProgressBar(): void {
+    private startProgressBarTimer() {
+      // console.log("startProgressBarTimer()");
+      if (this.timerSubscription)
+          clearTimeout(this.timerSubscription);
+      this.timerSubscription = setTimeout(() => {
+        //this.loadedPercent = 500;
+          let t = (Date.now() - this.timerSubscriptionStartedTime) / 1000;
+          this.loadedPercent = Math.min(t * 50, 500);
+          // console.log('Time: ' + t);
+          if (this.timerSubscriptionStartedTime > 0 && this.loadedPercent < 500)
+              this.startProgressBarTimer();
+      }, 100);
+    }
+
+    stopProgressBar(): void {
         // console.log("stopProgressBar()");
+        // if (this.timerSubscription)
+        //     this.timerSubscription.unsubscribe();
         if (this.timerSubscription)
-            this.timerSubscription.unsubscribe();
+            clearTimeout(this.timerSubscription);
+        this.timerSubscriptionStartedTime = 0;
         this.timerSubscription = null;
         this.loadedPercent = 0;
     }
 
     startPlayer(event): void {
-        console.log("startPlayer()");
+        //console.log("startPlayer()");
         // var target = event.target || event.srcElement;
         this.videoLoading = true;
         this.startProgressBar();
@@ -242,7 +262,7 @@ export class EventComponent implements OnInit {
     }
 
     stopPlayer(event): void {
-        console.log("stopPlayer()");
+        //console.log("stopPlayer()");
         var target = event.target || event.srcElement;
         target.pause();
         this.videoPlaying = false;
