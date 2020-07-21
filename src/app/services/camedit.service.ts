@@ -36,6 +36,18 @@ export class CamEditService {
         // {"login":"eu","pwd":"9fd858c200d2cad1d6b5e587e96e6dfb1e6a8bd9de359861608800f052327f57","cam":{"cam_id":12345}}
 
         var postData = JSON.stringify(login);
+
+        if (camName == null)
+            camName = '';
+        if (camUsername == null)
+            camUsername = '';
+        if (camPassword == null)
+            camPassword = '';
+        if (camUid == null)
+            camUid = '';
+        if (camMac == null)
+            camMac = '';
+
         if (camId != -1) {
             postData = postData.replace('}', ',') + '"cam":{' +
             '"cam_id":' + camId + ',' +
