@@ -10,8 +10,14 @@ export class PaymentSubscribeService {
     }
 
     subscribe(server: Server, login: Login, camId: number, planId: number): Promise<ServerResponse> {
-        var postData = JSON.stringify(login).replace('}', ',') + '"cam_id":' + camId + ',"plan_id":' + planId + '}';
-        let subscribeUrl = 'https://' + server.server_addr + "/v1/payment_subscribe.php";
+        let jsonLogin = login.toJSON();
+        let jsonIds = {
+            cam_id: camId,
+            planId: planId
+        }
+        const jsonCombined = Object.assign(jsonLogin, jsonIds); 
+        const postData = JSON.stringify(jsonCombined);
+        const subscribeUrl = 'https://' + server.server_addr + "/v1/payment_subscribe.php";
         // var postData = '{"login":"eu","pwd":"9fd858c200d2cad1d6b5e587e96e6dfb1e6a8bd9de359861608800f052327f57","cam_id":"888","plan_id":"1"}'
         return this.http
                 .post(subscribeUrl, postData)

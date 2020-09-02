@@ -21,16 +21,23 @@ export class FileGetTokenService {
     //         "token": "e2610c6b77782e2f5778e74fbb6eb6ef78b74a955c32125273a2f30fe5030147_5_1576678109"
     //     }
     // }
-    getFileToken(server: Server, login: Login, camId: number): Promise<FileGetToken>  {
-      let s = JSON.stringify(login);
-      let postData = s.replace('}', ',') + '"cam_id":' + camId + '}';
-      let userUrl = 'https://' + server.server_addr + '/v1/file_token_get.php';
-      //  var postData = `{"login":"eu","pwd":"9fd858c200d2cad1d6b5e587e96e6dfb1e6a8bd9de359861608800f052327f57"}`;
-      return this.http
-              .post(userUrl, postData)
-              .toPromise()
-              .then((res:ServerResponse) => res.data as FileGetToken)
-              .catch(this.handleError);
+    getFileToken(server: Server, login: Login, camId: number): Promise<FileGetToken> {
+        // let s = JSON.stringify(login);
+        // let postData = s.replace('}', ',') + '"cam_id":' + camId + '}';
+        let jsonLogin = login.toJSON();
+        let jsonCam = { 
+            // cam: {
+                cam_id: camId
+            // }
+        };
+        const jsonCombined = Object.assign(jsonLogin, jsonCam); 
+        const postData = JSON.stringify(jsonCombined);
+        const userUrl = 'https://' + server.server_addr + '/v1/file_token_get.php';
+        return this.http
+                .post(userUrl, postData)
+                .toPromise()
+                .then((res:ServerResponse) => res.data as FileGetToken)
+                .catch(this.handleError);
     }
 
     private handleError(error: any): Promise<any> {

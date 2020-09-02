@@ -22,7 +22,10 @@ export class MainUserGetService {
     //        return prospect;
     // }
     getMainUser(login: Login): Promise<Server> {
-        var postData = '{"login":"' + login.getUsername() + '"}';
+        let jsonLogin = {
+            login: login.getUsername()
+        };
+        const postData = JSON.stringify(jsonLogin);
         return this.http
                 .post(this.mainUserGetUrl, postData)
                 .toPromise()

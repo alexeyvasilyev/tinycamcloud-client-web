@@ -44,42 +44,37 @@ export class CamAddService {
         //enabled: boolean
       ): Promise<ServerResponse> {
 
-        // console.log('getCamAdd()');
-        // {"login":"eu","pwd":"9fd858c200d2cad1d6b5e587e96e6dfb1e6a8bd9de359861608800f052327f57","cam":{"cam_id":12345}}
-
-        var postData = JSON.stringify(login);
-            postData = postData.replace('}', ',') + '"cam":{' +
-            '"cam_name":"' + camName + '",' +
-            '"cam_login":"' + camUsername + '",' +
-            '"cam_pwd":"' + camPassword + '",' +
-            '"cam_proto":"' + camProto + '",' +
-            '"cam_uid":"' + camUid + '",' +
-            '"cam_prop_mask":' + this.DEFAULT_PROP_MASK + ',' +
-            '"cam_request":"' + camRequestMain + '",' +
-            '"cam_request_sub":"' + this.DEFAULT_REQUEST_SUB + '",' +
-            '"cam_web_port":' + this.DEFAULT_WEB_PORT + ',' +
-            '"cam_proto_port":' + camProtoPort + ',' +
-            '"cam_mac":"' + camMac + '",' +
-            '"cam_prop_mask":' + camPropMask + ',' +
-            '"cam_video_mask":"' + camVideoMask + '",' +
-            '"cam_video_sens":' + camVideoSens + ',' +
-            '"cam_audio_sens":' + camAudioSens + ',' +
-            '"cam_schedule":"' + this.DEFAULT_SCHEDULE + '",' +
-            '"cam_enabled":' + true + ',' +
-            '"cam_add_source":0' + // 0 - web, 1 - Android app, 2 - iOS app
-             '}}';
-            // postData = postData + '",cam":{"cam_id":' + camId + '}}';
+        let jsonLogin = login.toJSON();
+        let jsonCam = { 
+            cam: {
+                cam_name: camName,
+                cam_login: camUsername,
+                cam_pwd: camPassword,
+                cam_proto: camProto,
+                cam_uid: camUid,
+                cam_request: camRequestMain,
+                cam_request_sub: this.DEFAULT_REQUEST_SUB,
+                cam_web_port: this.DEFAULT_WEB_PORT,
+                cam_proto_port: camProtoPort,
+                cam_mac: camMac,
+                cam_prop_mask: camPropMask,
+                cam_video_mask: camVideoMask,
+                cam_video_sens: camVideoSens,
+                cam_audio_sens: camAudioSens,
+                cam_schedule: this.DEFAULT_SCHEDULE,
+                cam_enabled: true,
+                cam_add_source: 0  // 0 - web, 1 - Android app, 2 - iOS app
+            }
+        };
+        const jsonCombined = Object.assign(jsonLogin, jsonCam); 
+        const postData = JSON.stringify(jsonCombined);
         // console.log(postData);
-        var camAddUrl = 'https://' + server.server_addr + "/v1/cam_add.php";
-        //  var postData = `{"login":"eu","pwd":"9fd858c200d2cad1d6b5e587e96e6dfb1e6a8bd9de359861608800f052327f57"}`;
+        const camAddUrl = 'https://' + server.server_addr + "/v1/cam_add.php";
         return this.http
             .post(camAddUrl, postData)
             .toPromise()
             //.then(response => response.json().data as ArchiveRecord[])
             .catch(this.handleError);
-        //[{"id":10,"cam_id":1444908568,"date":"2015-10-19 13:50:05","image":"2015-10-19_16:50:05_sen786945787.jpg",
-        //  "video":"2015-10-19_16:50:05_rec.mp4","video_offset":17183,"duration":null,"has_audio":0,
-        //  "has_video":1,"audio_level":0,"video_level":786945787}]
     }
 
     private handleError(error: any): Promise<any> {

@@ -22,17 +22,39 @@ export class EventListService {
     private getEventList(server: Server, login: Login, camId: number, eventId: number, date: Date, limit: number, minDuration: number): Promise<EventRecord[]> {
         // console.log('getEventList(camId=' + camId + ', eventId=' + eventId + ', date=' + date + ', limit=' + limit + ')');
         // {"login":"eu","pwd":"9fd858c200d2cad1d6b5e587e96e6dfb1e6a8bd9de359861608800f052327f57","event":{"event_id":0,"limit":25,"is_finished":1}}
-        let param = (eventId < 0) ?
-            ('"date":"' + date.toISOString() + '"') :
-            ('"event_id":' + eventId);
 
-        var postData = JSON.stringify(login).replace('}', ',') + '"event":{' + param + ',"limit":' + limit + ',"min_duration":' + minDuration + '}}';
-        if (camId != -1) {
-            postData = postData.replace('}}', '},') + '"cam":{"cam_id":' + camId + '}}';
+        let jsonLogin = login.toJSON();
+        var jsonEvent: any;
+        if (eventId < 0) {
+            jsonEvent = {
+                event: {
+                    date: date.toISOString(),
+                    limit: limit,
+                    min_duration: minDuration
+                }
+            };
+        } else {
+            jsonEvent = {
+                event: {
+                    event_id: eventId,
+                    limit: limit,
+                    min_duration: minDuration
+                }
+            };
         }
-        // console.log(postData);
-        var camListUrl = 'https://' + server.server_addr + "/v1/event_list.php";
-        //  var postData = `{"login":"eu","pwd":"9fd858c200d2cad1d6b5e587e96e6dfb1e6a8bd9de359861608800f052327f57"}`;
+
+        var jsonCam = {};
+        if (camId != -1) {
+            jsonCam = { 
+                cam: {
+                    cam_id: camId
+                }
+            };
+        }
+
+        const jsonCombined = Object.assign(jsonLogin, jsonEvent, jsonCam);
+        const postData = JSON.stringify(jsonCombined);
+        const camListUrl = 'https://' + server.server_addr + "/v1/event_list.php";
         return this.http
             .post<ServerResponse>(camListUrl, postData)
             .toPromise()

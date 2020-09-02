@@ -22,17 +22,39 @@ export class ArchiveListService {
     private getArchiveList(server: Server, login: Login, camId: number, fileId: number, date: Date, limit: number): Promise<ArchiveRecord[]> {
         // console.log('getArchiveList(camId=' + camId + ', fileId=' + fileId + ', date=' + date + ', limit=' + limit + ')');
         // {"login":"eu","pwd":"9fd858c200d2cad1d6b5e587e96e6dfb1e6a8bd9de359861608800f052327f57","event":{"event_id":0,"limit":25,"is_finished":1}}
-        let param = date ?
-            ('"date":"' + date.toISOString() + '"') :
-            ('"file_id":' + fileId);
 
-        var postData = JSON.stringify(login).replace('}', ',') + '"archive":{' + param + ',"limit":' + limit + '}}';
-        if (camId != -1) {
-            postData = postData.replace('}}', '},') + '"cam":{"cam_id":' + camId + '}}';
+        let jsonLogin = login.toJSON();
+        var jsonArchive: any;
+        if (date != null) {
+            jsonArchive = {
+                archive: {
+                    date: date.toISOString(),
+                    limit: limit
+                }
+            };
+        } else {
+            jsonArchive = {
+                archive: {
+                    file_id: fileId,
+                    limit: limit,
+                }
+            };
         }
+
+        var jsonCam = {};
+        if (camId != -1) {
+            jsonCam = { 
+                cam: {
+                    cam_id: camId
+                }
+            };
+        }
+
+        const jsonCombined = Object.assign(jsonLogin, jsonArchive, jsonCam);
+        const postData = JSON.stringify(jsonCombined);
+
         // console.log(postData);
-        var archiveListUrl = 'https://' + server.server_addr + "/v1/archive_list.php";
-        //  var postData = `{"login":"eu","pwd":"9fd858c200d2cad1d6b5e587e96e6dfb1e6a8bd9de359861608800f052327f57"}`;
+        const archiveListUrl = 'https://' + server.server_addr + "/v1/archive_list.php";
         return this.http
             .post<ServerResponse>(archiveListUrl, postData)
             .toPromise()

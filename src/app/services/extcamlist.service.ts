@@ -18,13 +18,17 @@ export class ExtCamListService {
 //{"code":100,"message":"OK","data":"[{\"name\":\"Demo\",\"mac\":\"A4DA22393429\",\"model\":\"WYZEC1-JZ\"},{\"name\":\"Test\",\"mac\":\"A4DA133746C9\",\"model\":\"WYZECP1_JEF\"}]"}
     getExtCamList(server: Server, login: Login, camProto: string, camLogin: string, camPwd: string): Promise<ExtCamera[]> {
         // console.log('getExtCamList()');
-        var postData = JSON.stringify(login).replace('}', ',') +
-           '"cam":{"cam_proto":"' + camProto +
-           '","cam_login":"' + camLogin +
-           '","cam_pwd":"' + camPwd +
-           '"}}';
-
-        let extCamListUrl = 'https://' + server.server_addr + "/v1/ext_cam_list.php";
+        let jsonLogin = login.toJSON();
+        let jsonCam = { 
+            cam: {
+                cam_proto: camProto,
+                cam_login: camLogin,
+                cam_pwd: camPwd
+            }
+        };
+        const jsonCombined = Object.assign(jsonLogin, jsonCam); 
+        const postData = JSON.stringify(jsonCombined);
+        const extCamListUrl = 'https://' + server.server_addr + "/v1/ext_cam_list.php";
         return this.http
                 .post(extCamListUrl, postData)
                 .toPromise()
