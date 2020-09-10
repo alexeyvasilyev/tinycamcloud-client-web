@@ -325,6 +325,10 @@ export class ArchiveTimelineComponent implements OnInit {
 //        this.loadLastArchives();
     }
 
+    ngOnDestroy() {
+        this.stopUpdateTimer();
+    }
+
     handleKeyboardEvents(event: KeyboardEvent) {
         let keyCode = event.which || event.keyCode;
         // console.log("Key: " + keyCode);
