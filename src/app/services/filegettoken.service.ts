@@ -32,7 +32,7 @@ export class FileGetTokenService {
         };
         const jsonCombined = Object.assign(jsonLogin, jsonCam); 
         const postData = JSON.stringify(jsonCombined);
-        const userUrl = 'https://' + server.server_addr + '/v1/file_token_get.php';
+        const userUrl = `https://${server.server_addr}/v1/file_token_get.php`;
         return this.http
                 .post(userUrl, postData)
                 .toPromise()

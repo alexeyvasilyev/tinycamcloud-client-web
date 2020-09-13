@@ -69,7 +69,7 @@ export class CamAddService {
         const jsonCombined = Object.assign(jsonLogin, jsonCam); 
         const postData = JSON.stringify(jsonCombined);
         // console.log(postData);
-        const camAddUrl = 'https://' + server.server_addr + "/v1/cam_add.php";
+        const camAddUrl = `https://${server.server_addr}/v1/cam_add.php`;
         return this.http
             .post(camAddUrl, postData)
             .toPromise()

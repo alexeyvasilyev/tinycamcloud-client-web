@@ -28,7 +28,7 @@ export class ExtCamListService {
         };
         const jsonCombined = Object.assign(jsonLogin, jsonCam); 
         const postData = JSON.stringify(jsonCombined);
-        const extCamListUrl = 'https://' + server.server_addr + "/v1/ext_cam_list.php";
+        const extCamListUrl = `https://${server.server_addr}/v1/ext_cam_list.php`;
         return this.http
                 .post(extCamListUrl, postData)
                 .toPromise()

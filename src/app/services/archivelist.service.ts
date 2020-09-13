@@ -54,7 +54,7 @@ export class ArchiveListService {
         const postData = JSON.stringify(jsonCombined);
 
         // console.log(postData);
-        const archiveListUrl = 'https://' + server.server_addr + "/v1/archive_list.php";
+        const archiveListUrl = `https://${server.server_addr}/v1/archive_list.php`;
         return this.http
             .post<ServerResponse>(archiveListUrl, postData)
             .toPromise()

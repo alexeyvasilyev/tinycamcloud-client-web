@@ -29,7 +29,7 @@ export class CamDelService {
             postData = JSON.stringify(login);
         }
         // console.log(postData);
-        const camDelUrl = 'https://' + server.server_addr + "/v1/cam_del.php";
+        const camDelUrl = `https://${server.server_addr}/v1/cam_del.php`;
         return this.http
             .post(camDelUrl, postData)
             .toPromise()

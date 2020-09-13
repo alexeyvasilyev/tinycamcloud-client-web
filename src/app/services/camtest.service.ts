@@ -27,7 +27,7 @@ export class CamTestService {
         } else {
             postData = JSON.stringify(login);
         }
-        const camTestUrl = 'https://' + server.server_addr + "/v1/cam_probe.php";
+        const camTestUrl = `https://${server.server_addr}/v1/cam_probe.php`;
         return this.http
             .post<ServerResponse>(camTestUrl, postData)
             .toPromise()

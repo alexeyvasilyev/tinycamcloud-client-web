@@ -54,7 +54,7 @@ export class EventListService {
 
         const jsonCombined = Object.assign(jsonLogin, jsonEvent, jsonCam);
         const postData = JSON.stringify(jsonCombined);
-        const camListUrl = 'https://' + server.server_addr + "/v1/event_list.php";
+        const camListUrl = `https://${server.server_addr}/v1/event_list.php`;
         return this.http
             .post<ServerResponse>(camListUrl, postData)
             .toPromise()

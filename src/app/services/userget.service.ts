@@ -12,7 +12,7 @@ export class UserGetService {
     getUser(server: Server, login: Login): Promise<ServerResponse> {
         // console.log('getUser()');
         const postData = JSON.stringify(login);
-        const userUrl = 'https://' + server.server_addr + "/v1/user_get.php";
+        const userUrl = `https://${server.server_addr}/v1/user_get.php`;
         //  var postData = `{"login":"eu","pwd":"9fd858c200d2cad1d6b5e587e96e6dfb1e6a8bd9de359861608800f052327f57"}`;
         return this.http
                 .post(userUrl, postData)

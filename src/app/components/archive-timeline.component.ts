@@ -311,7 +311,7 @@ export class ArchiveTimelineComponent implements OnInit {
         this.loadLastEvents();
 
         document.onfullscreenchange = function(event) {
-            let height;
+            let height: number;
             if (document.fullscreenElement) {
                 height = this.mainEl.nativeElement.offsetHeight - this.canvasTimelineEl.nativeElement.offsetHeight;
             } else {
@@ -718,7 +718,7 @@ export class ArchiveTimelineComponent implements OnInit {
         // Check that all timelines have at least one archive loaded
         if (firstLoad) {
             const timelines = this.timeline.getTotalTimelines();
-            for (const i = 0; i < timelines; i++) {
+            for (let i = 0; i < timelines; i++) {
                 if (this.events[i].length == 0) {
                     console.log('Found empty events for timeline ' + i + '. Requesting more data.');
                     // Force to load background data

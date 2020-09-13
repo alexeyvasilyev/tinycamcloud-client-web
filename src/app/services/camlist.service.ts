@@ -21,7 +21,7 @@ export class CamListService {
         };
         const jsonCombined = Object.assign(jsonLogin, jsonPayload); 
         const postData = JSON.stringify(jsonCombined);
-        const camListUrl = 'https://' + server.server_addr + "/v1/cam_list.php";
+        const camListUrl = `https://${server.server_addr}/v1/cam_list.php`;
         return this.http
                 .post(camListUrl, postData)
                 .toPromise()

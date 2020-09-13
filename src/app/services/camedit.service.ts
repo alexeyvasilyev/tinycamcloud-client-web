@@ -74,7 +74,7 @@ export class CamEditService {
             postData = JSON.stringify(login);
         }
         // console.log(postData);
-        const camEditUrl = 'https://' + server.server_addr + "/v1/cam_edit.php";
+        const camEditUrl = `https://${server.server_addr}/v1/cam_edit.php`;
         return this.http
             .post(camEditUrl, postData)
             .toPromise()
