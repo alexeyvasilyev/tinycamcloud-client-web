@@ -1,11 +1,8 @@
 import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { MatButton } from '@angular/material/button';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatRadioModule } from '@angular/material/radio';
 import { ServerResponse, ExtCamera } from '../models';
-import { CamAddService, ExtCamListService, CamEditService, EventListService, LoginService } from '../services';
+import { CamAddService, ExtCamListService, ExtCamLoginService, CamEditService, EventListService, LoginService } from '../services';
 import { CamEditMaskDialogComponent } from './cam-edit-mask-dialog.component';
 import JsonUtils from '../jsonutils';
 import Utils from '../utils';
@@ -142,22 +139,27 @@ import Utils from '../utils';
         </div>
 
         <div *ngIf="isExtCamListSupported()">
-          <mat-form-field color="accent" style="display:inline-block; width:70%;">
-            <mat-select [(value)]="camMac" (selectionChange)="onExtCamSelected($event.value)" placeholder="Wyze device">
-              <mat-option *ngFor="let camera of extCameras" [value]="camera.mac" [disabled]="!extCamListLoaded">
-                {{camera.name}}
+          <div class="app-text-center" style="padding:10px">
+            <button
+              mat-raised-button
+              matSuffix
+              [disabled]="camUsername.length == 0 || camPassword.length == 0"
+              style="display:inline-block; margin: 0px 5px;"
+              (click)="isAddingCam() ? doExtCamLoginNew() : doExtCamLoginExisting()">
+              <i class="fas fa-link"></i> Connect
+            </button>
+          </div>
+          <mat-card *ngIf="extCamErrorMessage != null" class="app-text-center app-card-warning camlist-error">
+            {{this.extCamErrorMessage}}
+          </mat-card>
+          <mat-form-field color="accent" class="input-full-width">
+            <mat-select [(value)]="camMac" (selectionChange)="onExtCamSelected($event.value)" placeholder="Wyze device" [disabled]="!extCamListLoaded">
+              <mat-option *ngFor="let camera of extCameras" [value]="camera.cam_mac">
+                {{camera.cam_name}}
               </mat-option>
             </mat-select>
           </mat-form-field>
 
-          <button
-            mat-raised-button
-            matSuffix
-            [disabled]="!extCamListLoaded"
-            style="display:inline-block; margin: 0px 5px;"
-            (click)="loadExtCamList()">
-            <i class="fas fa-sync"></i>
-          </button>
         </div>
         <!-- <mat-icon fontSet="fa" fontIcon="fa-sync fa-spin"></mat-icon> -->
         <!-- <mat-icon [ngClass]="!extCamListLoaded ? 'fas fa-sync' : 'fas fa-sync fa-spin'"></mat-icon> -->
@@ -242,12 +244,18 @@ import Utils from '../utils';
               [min]="1"
               [step]="1"
               [thumbLabel]="true"
-              [(ngModel)]="camVideoSens">
+              [(ngModel)]="camVideoSens"
+              [disabled]="isExtCamListSupported() && !extCamListLoaded">
           </mat-slider>
           <div class="app-text-dark-hint hint-text">Larger sensitivity value will trigger motion<br/> detection more easily. By default, 35.</div>
         </div>
         <div class="app-text-center" style="padding:10px">
-          <button mat-raised-button (click)="onEditMaskClicked()"><i class="fas fa-th" style="vertical-align:center"></i> Change mask</button>
+          <button
+            mat-raised-button
+            (click)="onEditMaskClicked()"
+            [disabled]="isExtCamListSupported() && !extCamListLoaded">
+            <i class="fas fa-th" style="vertical-align:center"></i> Change mask
+          </button>
         </div>
 
         <div style="padding-top: 10px; padding-bottom: 5px;" *ngIf="isRtsp()">
@@ -279,6 +287,7 @@ import Utils from '../utils';
           *ngIf="isAddingCam()"
           mat-raised-button
           color="accent"
+          [disabled]="isExtCamListSupported() && !extCamListLoaded"
           (click)="onAddClicked()">Add</button>
     </mat-dialog-actions></div>
   `
@@ -304,6 +313,8 @@ export class CamEditDialogComponent {
     extCamListSupported = true;
     extCamListLoaded = false;
     extCameras: ExtCamera[] = null;
+    extCamPayload: string = null;
+    extCamErrorMessage: string = null;
 
 
     // 1st bit - sub stream. 0 - main, 1 - sub stream.
@@ -320,13 +331,14 @@ export class CamEditDialogComponent {
         private camAddService: CamAddService,
         private camEditService: CamEditService,
         private extCamListService: ExtCamListService,
+        private extCamLoginService: ExtCamLoginService,
         private eventListService: EventListService,
         public dialogRef: MatDialogRef<CamEditDialogComponent>,
         private dialog: MatDialog) {}
 
     ngOnInit() {
-        if (this.isExtCamListSupported())
-            this.loadExtCamList();
+        // if (this.isExtCamListSupported() && !this.isAddingCam())
+        //     this.loadExtCamList();
     }
 
     onProtoSelected(proto): void {
@@ -455,11 +467,61 @@ export class CamEditDialogComponent {
                 this.camPropMask,
                 this.camVideoMask,
                 this.camVideoSens,
-                100 - this.camAudioThreshold
+                100 - this.camAudioThreshold,
+                this.extCamPayload
             )
             .then(
                 res  => { this.processCamAdd(res); },
                 error => { this.processCamAddError(error); });
+    }
+
+    doExtCamLoginNew(): void {
+        console.log('doExtCamLoginNew()');
+        this.extCamListLoaded = false;
+        this.extCameras = null;
+        this.extCamErrorMessage = null;
+        this.extCamLoginService.getExtCamLoginNew(
+                this.loginService.server,
+                this.loginService.login,
+                this.camProto,
+                this.camUsername,
+                this.camPassword
+            )
+            .then(
+                res => { this.processExtCamLogin(res); },
+                error => { this.processExtCamListError(error); });
+    }
+
+    doExtCamLoginExisting(): void {
+        console.log('doExtCamLoginExisting()');
+        this.extCamListLoaded = false;
+        this.extCameras = null;
+        this.extCamErrorMessage = null;
+        this.extCamLoginService.getExtCamLoginExisting(
+                this.loginService.server,
+                this.loginService.login,
+                this.camId
+            )
+            .then(
+                res => { this.processExtCamLogin(res); },
+                error => { this.processExtCamListError(error); });
+    }
+
+    processExtCamLogin(res: ServerResponse) {
+        console.log('processExtCamLogin(): ' + res);
+        if (res.code != 100)
+            this.extCamErrorMessage = res.message;
+
+        let camera = res.data as ExtCamera;
+        this.extCamPayload = camera.cam_payload;
+        this.extCamListService.getExtCamListWithPayload(
+            this.loginService.server,
+            this.loginService.login,
+            this.extCamPayload
+        )
+        .then(
+            res => { this.processExtCamList(res); },
+            error => { this.processExtCamListError(error); });
     }
 
     loadExtCamList(): void {
@@ -474,13 +536,13 @@ export class CamEditDialogComponent {
                 this.camPassword
             )
             .then(
-                extCameras  => { this.processExtCamList(extCameras); },
+                res  => { this.processExtCamList(res); },
                 error => { this.processExtCamListError(error); });
     }
 
     onSaveClicked(): void {
         // console.log('onSaveClicked()');
-        this.loadExtCamList();
+        // this.loadExtCamList();
         this.camEditService.getCamEdit(
                 this.loginService.server,
                 this.loginService.login,
@@ -576,12 +638,16 @@ export class CamEditDialogComponent {
         console.error('Error in getCamEdit()', error);
     }
 
-    processExtCamList(cameras: ExtCamera[]) {
-        console.log('processExtCamList() cameras: ' + cameras);
+    processExtCamList(res: ServerResponse) {
+        console.log('processExtCamList(): ' + res);
+        if (res.code != 100)
+            this.extCamErrorMessage = res.message;
+
+        let cameras = res.data as ExtCamera[];
         this.extCameras = cameras;
         this.extCamListLoaded = true;
         if (this.isAddingCam() && cameras != null && cameras.length > 0) {
-            this.camMac = cameras[0].mac;
+            this.camMac = cameras[0].cam_mac;
         }
         // this.dialogRef.close(true);
         // Refresh page

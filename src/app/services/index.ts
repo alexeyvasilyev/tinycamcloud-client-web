@@ -6,6 +6,7 @@ export * from './camlist.service';
 export * from './camtest.service';
 export * from './eventlist.service';
 export * from './extcamlist.service';
+export * from './extcamlogin.service';
 export * from './filegettoken.service';
 export * from './login.service';
 export * from './mainuserget.service';

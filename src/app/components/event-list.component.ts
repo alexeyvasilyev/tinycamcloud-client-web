@@ -1,8 +1,7 @@
 import { Component, OnInit, Input, SimpleChanges, ViewEncapsulation } from '@angular/core';
 import { EventRecord, Login, Server, CameraSettings, CameraRecord, FileGetToken } from '../models';
-import { FormControl } from '@angular/forms';
 import { EventListService, LoginService, FileGetTokenService } from '../services';
-import { MatDatepicker, MatDatepickerInputEvent } from '@angular/material/datepicker';
+import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { Platform } from '@angular/cdk/platform';
 import JsonUtils from '../jsonutils';
 

@@ -42,6 +42,7 @@ export class CamAddService {
         camAudioSens: number,
         // schedule: string,
         //enabled: boolean
+        camPayload: string
       ): Promise<ServerResponse> {
 
         let jsonLogin = login.toJSON();
@@ -63,7 +64,8 @@ export class CamAddService {
                 cam_audio_sens: camAudioSens,
                 cam_schedule: this.DEFAULT_SCHEDULE,
                 cam_enabled: true,
-                cam_add_source: 0  // 0 - web, 1 - Android app, 2 - iOS app
+                cam_add_source: 0,  // 0 - web, 1 - Android app, 2 - iOS app
+                cam_payload: camPayload
             }
         };
         const jsonCombined = Object.assign(jsonLogin, jsonCam); 

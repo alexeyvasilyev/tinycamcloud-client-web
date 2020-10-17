@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Login, Server, ServerResponse, CameraSettings } from '../models';
+import { Login, Server, ServerResponse } from '../models';
 import 'rxjs/add/operator/toPromise';
 
 @Injectable()
