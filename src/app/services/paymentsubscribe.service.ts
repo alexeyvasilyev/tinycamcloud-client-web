@@ -13,7 +13,7 @@ export class PaymentSubscribeService {
         let jsonLogin = login.toJSON();
         let jsonIds = {
             cam_id: camId,
-            planId: planId
+            plan_id: planId
         }
         const jsonCombined = Object.assign(jsonLogin, jsonIds); 
         const postData = JSON.stringify(jsonCombined);
