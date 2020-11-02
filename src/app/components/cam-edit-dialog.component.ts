@@ -282,6 +282,7 @@ import Utils from '../utils';
           *ngIf="!isAddingCam()"
           mat-raised-button
           color="accent"
+          [disabled]="isExtCamListSupported() && !extCamListLoaded"
           (click)="onSaveClicked()">Save</button>
         <button
           *ngIf="isAddingCam()"
@@ -480,7 +481,7 @@ export class CamEditDialogComponent {
         this.extCamListLoaded = false;
         this.extCameras = null;
         this.extCamErrorMessage = null;
-        this.extCamLoginService.getExtCamLoginNew(
+        this.extCamLoginService.getExtCamLogin(
                 this.loginService.server,
                 this.loginService.login,
                 this.camProto,
@@ -497,10 +498,13 @@ export class CamEditDialogComponent {
         this.extCamListLoaded = false;
         this.extCameras = null;
         this.extCamErrorMessage = null;
-        this.extCamLoginService.getExtCamLoginExisting(
+        this.extCamLoginService.getExtCamLogin(
                 this.loginService.server,
                 this.loginService.login,
-                this.camId
+                this.camProto,
+                this.camUsername,
+                this.camPassword
+                // this.camId
             )
             .then(
                 res => { this.processExtCamLogin(res); },

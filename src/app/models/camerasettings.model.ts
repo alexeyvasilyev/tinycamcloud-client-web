@@ -83,6 +83,7 @@ export class CameraSettings {
     static getHumanReadableError(cameraSettings: CameraSettings): string {
         if (cameraSettings.cam_last_error == null || cameraSettings.cam_last_error.length == 0)
             return null;
+        let model = CameraSettings.isProtoP2pNeos(cameraSettings) ? "Neos" : "Wyze";
         switch (cameraSettings.cam_last_error) {
             case "dvr_50":
                 return "[Internal error] Invalid number of parameters."; // Bug between DVR and controller
@@ -131,15 +132,15 @@ export class CameraSettings {
 
             // Wyze camera specific errors (cam_probe.php only)
             case "ctrl_12":
-                return "Device is not a Wyze camera.";
+                return `Device is not a ${model} camera.`;
             case "ctrl_13":
-                return "Not such Wyze camera number.";
+                return `Not such ${model} camera number.`;
             case "ctrl_15":
-                return "Wyze user is locked.";
+                return `${model} user is locked.`;
             case "ctrl_16":
-                return "Wyze login is not successful.";
+                return `${model} login is not successful.`;
             case "ctrl_18":
-                return "2FA Wyze is not supported. Switch off 2FA in Wyze app.";
+                return `2FA ${model} is not supported. Switch off 2FA in ${model} app.`;
             case "ctrl_19":
                 return "Incorrect username or password.";
 

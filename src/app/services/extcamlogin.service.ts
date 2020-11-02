@@ -8,23 +8,23 @@ export class ExtCamLoginService {
     constructor(private http: HttpClient) {
     }
 
-    getExtCamLoginExisting(server: Server, login: Login, camId: number): Promise<ServerResponse> {
-        // console.log('getExtCamExisting()');
-        const jsonLogin = login.toJSON();
-        const jsonCam = {
-            cam: {
-                cam_id: camId
-            }
-        };
-        const jsonCombined = Object.assign(jsonLogin, jsonCam);
-        const postData = JSON.stringify(jsonCombined);
-        const extCamListUrl = `https://${server.server_addr}/v1/ext_cam_login.php`;
-        return this.http
-                .post(extCamListUrl, postData)
-                .toPromise()
-                // .then((res:ServerResponse) => res.data as ExtCamera)
-                .catch(this.handleError);
-    }
+    // getExtCamLoginExisting(server: Server, login: Login, camId: number): Promise<ServerResponse> {
+    //     // console.log('getExtCamExisting()');
+    //     const jsonLogin = login.toJSON();
+    //     const jsonCam = {
+    //         cam: {
+    //             cam_id: camId
+    //         }
+    //     };
+    //     const jsonCombined = Object.assign(jsonLogin, jsonCam);
+    //     const postData = JSON.stringify(jsonCombined);
+    //     const extCamListUrl = `https://${server.server_addr}/v1/ext_cam_login.php`;
+    //     return this.http
+    //             .post(extCamListUrl, postData)
+    //             .toPromise()
+    //             // .then((res:ServerResponse) => res.data as ExtCamera)
+    //             .catch(this.handleError);
+    // }
 
 // Request 1: New cam - try plain login
 // {
@@ -63,8 +63,9 @@ export class ExtCamLoginService {
 //     "cam_payload":"pl2"
 //   }
 // }
-    getExtCamLoginNew(server: Server, login: Login, camProto: string, camLogin: string, camPwd: string): Promise<ServerResponse> {
-        // console.log('getExtCamLoginNew()');
+//    getExtCamLoginNew(server: Server, login: Login, camProto: string, camLogin: string, camPwd: string): Promise<ServerResponse> {
+    getExtCamLogin(server: Server, login: Login, camProto: string, camLogin: string, camPwd: string): Promise<ServerResponse> {
+            // console.log('getExtCamLoginNew()');
         const jsonLogin = login.toJSON();
         const jsonCam = {
             cam: {
