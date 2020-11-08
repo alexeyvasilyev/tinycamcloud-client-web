@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CameraSettings, ServerResponse } from '../models';
@@ -109,12 +109,19 @@ import JsonUtils from '../jsonutils';
                         class="my-button"
                         (click)="onDemoClicked(i)">Free 7 Days Demo</button>
                   </div>
-                  <div>
+                  <div *ngIf="customPlanId == -1">
                     <button
                         mat-raised-button
                         color="accent"
                         class="my-button"
                         (click)="onClicked(i)">{{getButtonText(i)}}</button><br/><span class="app-text-dark-secondary">{{getButtonDescription(i)}}</span>
+                  </div>
+                  <div *ngIf="customPlanId != -1">
+                    <button
+                        mat-raised-button
+                        color="accent"
+                        class="my-button"
+                        (click)="onCustomClicked(i)">Subscribe via PayPal</button><br/><span class="app-text-dark-secondary">Custom subscription plan</span>
                   </div>
                 </div>
               </div>
@@ -162,6 +169,7 @@ export class AccountCamListComponent implements OnInit {
     processing: boolean = false;
     demoAvailable: boolean = true;
     private snackBarDurationInSec = 4;
+    @Input() customPlanId: number;
 
     // config: MatDialogConfig = {
         // minWidth: '100',
@@ -313,9 +321,15 @@ export class AccountCamListComponent implements OnInit {
         return camera.state == 'NoPayment';
     }
 
+    onCustomClicked(i: number) {
+        let camera = this.cameras[i];
+        console.log(`onCustomClicked(${i}): ${camera.cam_id}`);
+        this.makeCustomSubscription(camera, this.customPlanId);
+    }
+
     onClicked(i: number): void {
         let camera = this.cameras[i];
-        console.log('onClicked(' + i + '): ' + camera.cam_id);
+        console.log(`onClicked(${i}): ${camera.cam_id}`);
         switch (camera.state) {
             case 'NoPayment':
                 this.makeSubscription(camera);
@@ -391,6 +405,14 @@ export class AccountCamListComponent implements OnInit {
         this.processing = true;
         this.paymentSubscribeService
             .subscribe(this.loginService.server, this.loginService.login, cameraSettings.cam_id, 1000)
+            .then(res => { this.processSubscribe(res); })
+    }
+
+    private makeCustomSubscription(cameraSettings: CameraSettings, planId: number) {
+        console.log(`Making custom subscription for cam ${cameraSettings.cam_id} with planId ${planId}`);
+        this.processing = true;
+        this.paymentSubscribeService
+            .subscribe(this.loginService.server, this.loginService.login, cameraSettings.cam_id, planId)
             .then(res => { this.processSubscribe(res); })
     }
 

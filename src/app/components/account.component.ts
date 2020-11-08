@@ -34,7 +34,7 @@ import { LoginService } from '../services';
         </div>
         </mat-card-content>
       </mat-card>
-      <account-cam-list></account-cam-list>
+      <account-cam-list [customPlanId]="customPlanId"></account-cam-list>
     `
 })
 
@@ -42,6 +42,7 @@ export class AccountComponent {
 
     login = this.loginService.login;
     justSubscribed = 0; // 0 - n/a, 1 - success, -1 - failed
+    customPlanId = -1;
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -54,6 +55,7 @@ export class AccountComponent {
         // console.log('account initialized');
         // subscribe to router event
         this.activatedRoute.queryParams.subscribe((params: Params) => {
+            // Show message if subscription succeeded or failed
             let status = params['subscription'];
             if (status) {
                 switch (status) {
@@ -62,7 +64,13 @@ export class AccountComponent {
                 }
                 console.log('subscription=' + status);
             }
-          });
-      }
+
+            let planId = params['planId'];
+            if (planId) {
+                this.customPlanId = planId;
+                console.log('planId=' + planId);
+            }
+        });
+    }
 
 }
