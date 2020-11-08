@@ -395,6 +395,7 @@ export class CamEditDialogComponent {
     }
 
     isExtCamListSupported(): boolean {
+      // console.log('isExtCamListSupported: ' + (this.isP2pWyze() && this.extCamListSupported));
       return this.isP2pWyze() && this.extCamListSupported;// && this.camMac != null;
     }
 
@@ -476,8 +477,13 @@ export class CamEditDialogComponent {
                 error => { this.processCamAddError(error); });
     }
 
+    checkCamUsername() {
+        this.camUsername = this.camUsername.trim();
+    }
+
     doExtCamLoginNew(): void {
         console.log('doExtCamLoginNew()');
+        this.checkCamUsername();
         this.extCamListLoaded = false;
         this.extCameras = null;
         this.extCamErrorMessage = null;
@@ -495,6 +501,7 @@ export class CamEditDialogComponent {
 
     doExtCamLoginExisting(): void {
         console.log('doExtCamLoginExisting()');
+        this.checkCamUsername();
         this.extCamListLoaded = false;
         this.extCameras = null;
         this.extCamErrorMessage = null;
@@ -660,8 +667,9 @@ export class CamEditDialogComponent {
 
     processExtCamListError(error: string) {
         console.error('Error in getExtCamList()', error);
+        this.extCamErrorMessage = error;
         this.extCamListLoaded = true;
-        this.extCamListSupported = false;
+//        this.extCamListSupported = false;
     }
 
     isPrivateIpAddress(ip: string): boolean {
