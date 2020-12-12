@@ -18,7 +18,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { MomentModule } from 'angular2-moment';
+import { MomentModule } from 'ngx-moment';
 //import { VgCoreModule } from 'videogular2/core';
 // import { VgControlsModule } from 'videogular2/controls';
 // import { VgOverlayPlayModule } from 'videogular2/overlay-play';
