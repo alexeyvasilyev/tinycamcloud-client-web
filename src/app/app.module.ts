@@ -3,7 +3,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { RouterModule, Routes } from '@angular/router';
+// import { RouterModule, Routes } from '@angular/router';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -19,11 +19,6 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MomentModule } from 'ngx-moment';
-//import { VgCoreModule } from 'videogular2/core';
-// import { VgControlsModule } from 'videogular2/controls';
-// import { VgOverlayPlayModule } from 'videogular2/overlay-play';
-// import { VgBufferingModule } from 'videogular2/buffering';
-//import { VgStreamingModule } from 'videogular2/streaming';
 
 import { AppComponent } from './app.component';
 import {

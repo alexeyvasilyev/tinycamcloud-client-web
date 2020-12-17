@@ -149,7 +149,7 @@ import Utils from '../utils';
               <i class="fas fa-link"></i> Connect
             </button>
           </div>
-          <mat-card *ngIf="extCamErrorMessage != null" class="app-text-center app-card-warning camlist-error">
+          <mat-card *ngIf="extCamErrorMessage != null" class="app-text-center app-card-warning camlist-error" style="margin-bottom: 10px">
             {{this.extCamErrorMessage}}
           </mat-card>
           <mat-form-field color="accent" class="input-full-width">
@@ -353,7 +353,20 @@ export class CamEditDialogComponent {
     }
 
     onExtCamSelected(mac): void {
-      console.log('Mac selected: "' + mac + '"');
+        console.log('Mac selected: "' + mac + '"');
+        if (this.isP2pWyze()) {
+            for (let camera of this.extCameras) {
+                if (camera.cam_mac === mac) {
+                    //                       V1       V2           Cam Pan        Doorbell
+                    const supportedModels = ['WYZEC1','WYZEC1-JZ', 'WYZECP1_JEF', 'WYZEDB3'];
+                    this.extCamErrorMessage =
+                        (!supportedModels.includes(camera.cam_model) ?
+                            `Unsupported Wyze camera "${camera.cam_model}"` :
+                            null);
+                    break;
+                }
+            }
+        }
     }
 
     getHostnameText(): string {
@@ -650,7 +663,7 @@ export class CamEditDialogComponent {
     }
 
     processExtCamList(res: ServerResponse) {
-        console.log('processExtCamList(): ' + res);
+        console.log('processExtCamList(): ', res);
         if (res.code != 100)
             this.extCamErrorMessage = res.message;
 

@@ -3,8 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { FileGetToken } from '../models';
 import { LoginService, FileGetTokenService } from '../services';
 import JsonUtils from '../jsonutils';
-
-declare const videojs: any;
+import videojs from 'video.js';
 
 @Component({
   selector: 'live-dialog',
@@ -14,7 +13,7 @@ declare const videojs: any;
         <td width="90%">
           <div mat-dialog-title style="margin: auto;">{{title}}
           <span *ngIf="videoError" style="color:red">Video loading error!</span></div>
-        </td>
+        </td> 
         <td width="10%" style="text-align:right;">
           <button mat-icon-button mat-dialog-close><i class="fa fa-times" aria-hidden="true"></i></button>
         </td>
