@@ -131,7 +131,7 @@ const INTERVAL_HOUR_12 =  12 * 60 * 60 * 1000;
     </div>
 
     <div style="padding: 20px; text-align: center;">
-      <button class="button" (click)="handlePlayPauseClicked();">
+      <button class="button" (click)="handlePlayPauseClicked();" [matTooltip]="videoPlaying ? 'Pause' : 'Play'">
         <span *ngIf="!videoPlaying">
           <i class="fas fa-play"></i>
         </span>
@@ -140,34 +140,34 @@ const INTERVAL_HOUR_12 =  12 * 60 * 60 * 1000;
         </span>
       </button>
 
-      <button class="button" (click)="gotoPrevEvent(true);" style="margin-left:30px;">
+      <button class="button" (click)="gotoPrevEvent(true);" style="margin-left:30px;" matTooltip="Previous event">
         <span>
           <i class="fas fa-backward"></i>
         </span>
       </button>
-      <button class="button" (click)="gotoNextEvent(true);">
+      <button class="button" (click)="gotoNextEvent(true);" matTooltip="Next event">
         <span>
           <i class="fas fa-forward"></i>
         </span>
       </button>
-      <button class="button" (click)="gotoLastEvent();" style="margin-left:30px;">
+      <button class="button" (click)="gotoLastEvent();" style="margin-left:30px;" matTooltip="Last event">
         <span>
           <i class="fas fa-fast-forward"></i>
         </span>
       </button>
 
-      <button class="button" (click)="timeline.increaseInterval();" style="margin-left:30px;">
+      <button class="button" (click)="timeline.increaseInterval();" style="margin-left:30px;" matTooltip="Zoom out timeline">
         <span>
           <i class="fas fa-minus"></i>
         </span>
       </button>
-      <button class="button" (click)="timeline.decreaseInterval();">
+      <button class="button" (click)="timeline.decreaseInterval();" matTooltip="Zoom in timeline">
         <span>
           <i class="fas fa-plus"></i>
         </span>
       </button>
 
-      <button class="button" (click)="startFullScreen();" style="margin-left:30px;">
+      <button class="button" (click)="startFullScreen();" style="margin-left:30px;" matTooltip="Full screen">
         <span>
           <i class="fas fa-expand"></i>
         </span>
@@ -183,19 +183,19 @@ const INTERVAL_HOUR_12 =  12 * 60 * 60 * 1000;
       </button>
 
       <div *ngIf="moreButtons" style="padding-top:20px;">
-        <button class="button-selectable" (click)="setSpeed(0.1);" style="margin-left:30px;" [ngStyle]="{'opacity':playerSpeed==0.1?'0.5':'1.0'}">
+        <button class="button-selectable" (click)="setSpeed(0.1);" style="margin-left:30px;" [ngStyle]="{'opacity':playerSpeed==0.1?'0.5':'1.0'}" matTooltip="Speed 0.1x">
           <span>0.1x</span>
         </button>
-        <button class="button-selectable" (click)="setSpeed(0.5);" [ngStyle]="{'opacity':playerSpeed==0.5?'0.5':'1.0'}">
-          <span>0.2x</span>
+        <button class="button-selectable" (click)="setSpeed(0.5);" [ngStyle]="{'opacity':playerSpeed==0.5?'0.5':'1.0'}" matTooltip="Speed 0.5x">
+          <span>0.5x</span>
         </button>
-        <button class="button-selectable" (click)="setSpeed(1.0);" [ngStyle]="{'opacity':playerSpeed==1.0?'0.5':'1.0'}">
+        <button class="button-selectable" (click)="setSpeed(1.0);" [ngStyle]="{'opacity':playerSpeed==1.0?'0.5':'1.0'}" matTooltip="Original speed">
           <span>1x</span>
         </button>
-        <button class="button-selectable" (click)="setSpeed(2.0);" [ngStyle]="{'opacity':playerSpeed==2.0?'0.5':'1.0'}">
+        <button class="button-selectable" (click)="setSpeed(2.0);" [ngStyle]="{'opacity':playerSpeed==2.0?'0.5':'1.0'}" matTooltip="Speed 2x">
           <span>2x</span>
         </button>
-        <button class="button-selectable" (click)="setSpeed(3.0);" [ngStyle]="{'opacity':playerSpeed==3.0?'0.5':'1.0'}">
+        <button class="button-selectable" (click)="setSpeed(3.0);" [ngStyle]="{'opacity':playerSpeed==3.0?'0.5':'1.0'}" matTooltip="Speed 3x">
           <span>3x</span>
         </button>
         <!-- <a href="{{this.videoUrl}}" download class="button" style="margin-left:30px;" target="_blank">

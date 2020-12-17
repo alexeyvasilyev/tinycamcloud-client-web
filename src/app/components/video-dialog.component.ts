@@ -1,7 +1,6 @@
 import { Component, Input, AfterViewInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-
-declare const videojs: any;
+import videojs from 'video.js';
 
 @Component({
   selector: 'video-dialog',
@@ -19,7 +18,8 @@ declare const videojs: any;
     </table>
 
     <video width="800px" id='mp4video' class="video-js vjs-default-skin vjs-big-play-centered"
-       controls (error)="handleVideoError()" (playing)="handleVideoPlaying()" poster="{{imageUrl}}">
+      data-setup='{"bigPlayButton": false, "loadingSpinner": false, "playbackRates": [0.1, 0.5, 1, 2, 3]}'
+      controls (error)="handleVideoError()" (playing)="handleVideoPlaying()" poster="{{imageUrl}}">
     </video>
 
   `

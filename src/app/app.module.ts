@@ -15,6 +15,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatNativeDateModule } from '@angular/material/core';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
@@ -117,6 +118,7 @@ import { AppRoutingModule } from './app-routing.module';
     MatSelectModule,
     MatSliderModule,
     MatSnackBarModule,
+    MatTooltipModule,
     MomentModule,
     FormsModule
     // VgCoreModule,
