@@ -1,7 +1,7 @@
 import { Router, NavigationEnd, Event as NavigationEvent } from '@angular/router';
 import { Location } from '@angular/common';
 import { Component } from '@angular/core';
-import { ConnectionService } from 'ng-connection-service';
+// import { ConnectionService } from 'ng-connection-service';
 
 // Declare ga function as ambient
 declare var ga:Function;
@@ -25,7 +25,7 @@ export class AppComponent {
 
     constructor(_router:Router,
                 _location:Location,
-                private connectionService: ConnectionService) {
+                /*private connectionService: ConnectionService*/) {
         _router.events.subscribe((event:NavigationEvent) => {
             // Send GA tracking on NavigationEnd event. You may wish to add other
             // logic here too or change which event to work with
@@ -40,16 +40,16 @@ export class AppComponent {
             }
         });
 
-        // https://medium.com/@balramchavan/detecting-internet-connection-status-in-angular-application-ng-connection-service-1fa8add3b975
-        this.connectionService.monitor().subscribe(isConnected => {
-            this.isConnected = isConnected;
-            console.log("STATUS: " + (isConnected ? "ONLINE" : "OFFLINE"));
-            // if (isConnected) {
-            //   _router.navigate(['/events']);
-            //   console.log("Route: " + this.currentRoute);
-            //   _router.navigate([this.currentRoute]);
-            // }
-        })
+        // // https://medium.com/@balramchavan/detecting-internet-connection-status-in-angular-application-ng-connection-service-1fa8add3b975
+        // this.connectionService.monitor().subscribe(isConnected => {
+        //     this.isConnected = isConnected;
+        //     console.log("STATUS: " + (isConnected ? "ONLINE" : "OFFLINE"));
+        //     // if (isConnected) {
+        //     //   _router.navigate(['/events']);
+        //     //   console.log("Route: " + this.currentRoute);
+        //     //   _router.navigate([this.currentRoute]);
+        //     // }
+        // })
     }
 }
 

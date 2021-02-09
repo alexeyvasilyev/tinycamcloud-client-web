@@ -1,5 +1,4 @@
 import { Component, Input } from '@angular/core';
-import { Router } from '@angular/router';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ServerResponse, ExtCamera } from '../models';
 import { CamAddService, ExtCamListService, ExtCamLoginService, CamEditService, EventListService, LoginService } from '../services';
@@ -327,7 +326,6 @@ export class CamEditDialogComponent {
     private PARAM_CAM_PROP_MASK_REC_WITH_AUDIO = 1 << 8;
 
     constructor(
-        private router: Router,
         private loginService: LoginService,
         private camAddService: CamAddService,
         private camEditService: CamEditService,
@@ -357,8 +355,8 @@ export class CamEditDialogComponent {
         if (this.isP2pWyze()) {
             for (let camera of this.extCameras) {
                 if (camera.cam_mac === mac) {
-                    //                       V1       V2           Cam Pan        Doorbell
-                    const supportedModels = ['WYZEC1','WYZEC1-JZ', 'WYZECP1_JEF', 'WYZEDB3'];
+                    //                       V1       V2           Cam Pan        V3                Doorbell
+                    const supportedModels = ['WYZEC1','WYZEC1-JZ', 'WYZECP1_JEF', 'WYZE_CAKP2JFUS', 'WYZEDB3'];
                     this.extCamErrorMessage =
                         (!supportedModels.includes(camera.cam_model) ?
                             `Unsupported Wyze camera "${camera.cam_model}"` :
@@ -673,6 +671,9 @@ export class CamEditDialogComponent {
         if (this.isAddingCam() && cameras != null && cameras.length > 0) {
             this.camMac = cameras[0].cam_mac;
         }
+        // Force to check if cameras supported
+        this.onExtCamSelected(this.camMac);
+
         // this.dialogRef.close(true);
         // Refresh page
         // this.router.navigate(['/account?refresh=1']);
