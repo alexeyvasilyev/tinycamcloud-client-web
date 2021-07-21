@@ -1,9 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Router } from '@angular/router';
 import { MatDialogRef } from '@angular/material/dialog';
-import { MatButton } from '@angular/material/button';
-import { MatInputModule } from '@angular/material/input';
-import { MatToolbarModule } from '@angular/material/toolbar';
 import { CamDelService, LoginService } from '../services';
 
 @Component({
@@ -35,7 +31,6 @@ export class CamDelDialogComponent {
     @Input() camId: number;
 
     constructor(
-        private router: Router,
         private loginService: LoginService,
         private camDelService: CamDelService,
         public dialogRef: MatDialogRef<CamDelDialogComponent>) {}

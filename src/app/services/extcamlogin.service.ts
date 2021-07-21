@@ -63,9 +63,10 @@ export class ExtCamLoginService {
 //     "cam_payload":"pl2"
 //   }
 // }
-//    getExtCamLoginNew(server: Server, login: Login, camProto: string, camLogin: string, camPwd: string): Promise<ServerResponse> {
-    getExtCamLogin(server: Server, login: Login, camProto: string, camLogin: string, camPwd: string): Promise<ServerResponse> {
-            // console.log('getExtCamLoginNew()');
+    getExtCamLogin(
+            server: Server, login: Login, camProto: string, camLogin: string, camPwd: string,
+            camPayload?: string, mfaCode?: string): Promise<ServerResponse> {
+        // console.log('getExtCamLogin()');
         const jsonLogin = login.toJSON();
         const jsonCam = {
             cam: {

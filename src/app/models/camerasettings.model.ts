@@ -140,9 +140,13 @@ export class CameraSettings {
             case "ctrl_16":
                 return `${model} login is not successful.`;
             case "ctrl_18":
-                return `2FA ${model} is not supported. Switch off 2FA in ${model} app.`;
+                return `2FA ${model} via SMS is not supported. Switch to 2FA TOTP or switch off 2FA in ${model} app.`;
             case "ctrl_19":
                 return "Incorrect username or password.";
+            case "ctrl_114":
+                return `Both access and refresh token expired. Need to relogin.`;
+            case "ctrl_115":
+                return `2FA ${model} TOTP code required.`;
 
             default:
                 return cameraSettings.cam_last_error;
